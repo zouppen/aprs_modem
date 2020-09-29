@@ -13,6 +13,9 @@
 #define TFEND 0xDC
 #define TFESC 0xDD
 
+#define TXD_PIN 9
+#define EN_PIN 8
+
 extern Afsk *AFSK_modem;
 extern AX25Ctx AX25;
 uint8_t AFSK_dac_isr(Afsk *afsk);
@@ -20,15 +23,15 @@ uint8_t AFSK_dac_isr(Afsk *afsk);
 void setup() {
     // Set up serial port
     Serial.begin(9600);
-    Serial1.begin(9600);
-    pinMode(13, OUTPUT);    
-    pinMode(9, OUTPUT);
+    pinMode(TXD_PIN, OUTPUT);
+    
     Timer1.initialize(64); // set a timer of length 100000 microseconds (or 0.1 sec - or 10Hz => the led will blink 5 times, 5 cycles of on-and-off, per second)
-    Timer1.pwm(9, 512);
+    Timer1.pwm(TXD_PIN, 512);
     Timer1.attachInterrupt( timerIsr ); // attach the service routine here
 
     // Initialise APRS library - This starts the modem
-    APRS_init();
+    APRS_init(EN_PIN);
+    DDRB &= ~(1<<0); // Start with RX LED off (or set to INPUT mode)
   
     // You must at a minimum configure your callsign and SSID
     APRS_setCallsign("OH6EYA", 1);
@@ -41,14 +44,13 @@ void loop() {
     static uint8_t state = KISS_STATE_END;
   
     while (Serial.available()) {
+	DDRB |= (1<<0); // Any serial traffic turns on RX LED
 	uint8_t c = Serial.read();
 
 	// Send if FEND and we have something to send
 	if (c == FEND) {
 	    if (state == KISS_STATE_DATA && msg_i != 0) {
-		// Something to send
-		Serial1.write("\nPKT: ");
-		Serial1.write(msg, msg_i);
+		DDRB &= ~(1<<0); // Datagram completed, turn off RX LED
 		ax25_sendRaw(&AX25, msg, msg_i);
 		msg_i = 0;
 	    }
@@ -99,7 +101,6 @@ void loop() {
 
 void timerIsr()
 {
-    // Toggle LED
-    digitalWrite( 13, digitalRead( 13 ) ^ 1 );
-    Timer1.pwm(9, (int)AFSK_dac_isr(AFSK_modem) << 2);
+    // Set new value for PWM
+    Timer1.pwm(TXD_PIN, (int)AFSK_dac_isr(AFSK_modem) << 2);
 }
