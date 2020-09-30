@@ -34,14 +34,6 @@ cube([100,100,h]);
     }
 }
 
-module cube3(){
-difference(){
-    cube2();
-    translate([0,(l+wall),0]) 
-cube([100,100,h]);
-    }
-}
-
 module cube4(){
 difference(){
     cube3();
