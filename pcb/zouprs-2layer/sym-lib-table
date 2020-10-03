@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name oma)(type Legacy)(uri ${KIPRJMOD}/radiometrix.lib)(options "")(descr ""))
+)

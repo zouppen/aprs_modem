@@ -1,0 +1,264 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Sparkfun:SPARKFUN_PRO_MICRO B1
+U 1 1 5F71BD06
+P 4650 2850
+F 0 "B1" H 4650 3760 45  0000 C CNN
+F 1 "SPARKFUN_PRO_MICRO" H 4650 3676 45  0000 C CNN
+F 2 "Sparkfun boards:SPARKFUN_PRO_MICRO" H 4650 3650 20  0001 C CNN
+F 3 "" H 4650 2850 50  0001 C CNN
+F 4 "XXX-00000" H 4650 3581 60  0000 C CNN "Kenttä4"
+	1    4650 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L oma:HX1 B2
+U 1 1 5F73604F
+P 2100 2950
+F 0 "B2" H 1650 3100 50  0000 R CNN
+F 1 "HX1" H 1650 3000 50  0000 R CNN
+F 2 "radiometrix:PinHeader_1x12_P2.54mm_Vertical" H 2100 2950 50  0001 C CNN
+F 3 "~" H 2100 2950 50  0001 C CNN
+	1    2100 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0101
+U 1 1 5F725662
+P 5400 2300
+F 0 "#PWR0101" H 5400 2050 50  0001 C CNN
+F 1 "GND" H 5405 2127 50  0000 C CNN
+F 2 "" H 5400 2300 50  0001 C CNN
+F 3 "" H 5400 2300 50  0001 C CNN
+	1    5400 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C1
+U 1 1 5F72991B
+P 2700 3350
+F 0 "C1" H 2792 3396 50  0000 L CNN
+F 1 "87n" H 2792 3305 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 2700 3350 50  0001 C CNN
+F 3 "~" H 2700 3350 50  0001 C CNN
+	1    2700 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Small R1
+U 1 1 5F72A55F
+P 3050 3150
+F 0 "R1" V 2850 3150 50  0000 C CNN
+F 1 "674" V 2950 3150 50  0000 C CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 3050 3150 50  0001 C CNN
+F 3 "~" H 3050 3150 50  0001 C CNN
+	1    3050 3150
+	0    1    1    0   
+$EndComp
+NoConn ~ 4200 2300
+NoConn ~ 4200 2400
+NoConn ~ 4200 2700
+NoConn ~ 4200 2800
+NoConn ~ 4200 3000
+NoConn ~ 4200 3100
+NoConn ~ 4200 3200
+NoConn ~ 5100 3200
+NoConn ~ 5100 3100
+NoConn ~ 5100 3000
+NoConn ~ 5100 2900
+NoConn ~ 5100 2800
+NoConn ~ 5100 2700
+NoConn ~ 5100 2500
+NoConn ~ 5100 2300
+NoConn ~ 4200 2900
+Wire Wire Line
+	4000 2600 4200 2600
+Wire Wire Line
+	4000 2500 4000 2600
+Wire Wire Line
+	4200 2500 4000 2500
+NoConn ~ 5100 3300
+NoConn ~ 5100 3400
+Wire Wire Line
+	2300 3050 2550 3050
+Wire Wire Line
+	2550 3050 2550 2650
+Wire Wire Line
+	2550 2450 2300 2450
+Wire Wire Line
+	2300 2650 2550 2650
+Connection ~ 2550 2650
+Wire Wire Line
+	2550 3050 2550 3500
+Connection ~ 2550 3050
+$Comp
+L Connector:Conn_Coaxial J1
+U 1 1 5F71C5CA
+P 2550 2150
+F 0 "J1" H 2650 2125 50  0000 L CNN
+F 1 "Conn_Coaxial" H 2650 2034 50  0000 L CNN
+F 2 "Connector_Coaxial:SMA_Samtec_SMA-J-P-X-ST-EM1_EdgeMount" H 2550 2150 50  0001 C CNN
+F 3 " ~" H 2550 2150 50  0001 C CNN
+	1    2550 2150
+	1    0    0    -1  
+$EndComp
+Connection ~ 2550 2450
+Wire Wire Line
+	2550 2450 2550 2650
+Wire Wire Line
+	2550 2350 2550 2450
+Wire Wire Line
+	2350 2150 2350 2550
+Wire Wire Line
+	2350 2550 2300 2550
+Wire Wire Line
+	2700 3150 2700 3250
+Connection ~ 2700 3150
+Wire Wire Line
+	2700 3150 2300 3150
+$Comp
+L power:GND #PWR0103
+U 1 1 5F7284D0
+P 2550 3600
+F 0 "#PWR0103" H 2550 3350 50  0001 C CNN
+F 1 "GND" H 2555 3427 50  0000 C CNN
+F 2 "" H 2550 3600 50  0001 C CNN
+F 3 "" H 2550 3600 50  0001 C CNN
+	1    2550 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2550 3500 2700 3500
+Connection ~ 2550 3500
+Wire Wire Line
+	2700 3450 2700 3500
+Wire Wire Line
+	3250 2850 3150 2850
+Connection ~ 3150 2850
+Wire Wire Line
+	2550 3600 2550 3500
+Connection ~ 4000 2600
+$Comp
+L power:GND #PWR0102
+U 1 1 5F727AEF
+P 4000 2600
+F 0 "#PWR0102" H 4000 2350 50  0001 C CNN
+F 1 "GND" H 4005 2427 50  0000 C CNN
+F 2 "" H 4000 2600 50  0001 C CNN
+F 3 "" H 4000 2600 50  0001 C CNN
+	1    4000 2600
+	1    0    0    -1  
+$EndComp
+Text GLabel 3250 2850 2    50   Input ~ 0
+EN
+Text GLabel 4200 3300 0    50   Output ~ 0
+EN
+Text GLabel 4200 3400 0    50   Output ~ 0
+FSK
+Text GLabel 3250 3150 2    50   Input ~ 0
+FSK
+Wire Wire Line
+	2300 2850 3150 2850
+$Comp
+L Connector:TestPoint TP1
+U 1 1 5F75EEAA
+P 3150 2850
+F 0 "TP1" H 3250 3050 50  0000 L CNN
+F 1 "TX Enable" H 3250 2950 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 3350 2850 50  0001 C CNN
+F 3 "~" H 3350 2850 50  0001 C CNN
+	1    3150 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP2
+U 1 1 5F769D1D
+P 2700 3150
+F 0 "TP2" H 2800 3350 50  0000 L CNN
+F 1 "FSK" H 2800 3250 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 2900 3150 50  0001 C CNN
+F 3 "~" H 2900 3150 50  0001 C CNN
+	1    2700 3150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP4
+U 1 1 5F76ABE5
+P 5400 2300
+F 0 "TP4" H 5458 2418 50  0000 L CNN
+F 1 "GND" H 5458 2327 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 5600 2300 50  0001 C CNN
+F 3 "~" H 5600 2300 50  0001 C CNN
+	1    5400 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP3
+U 1 1 5F76DA84
+P 5850 2600
+F 0 "TP3" H 5908 2718 50  0000 L CNN
+F 1 "Vcc" H 5908 2627 50  0000 L CNN
+F 2 "TestPoint:TestPoint_Pad_D1.0mm" H 6050 2600 50  0001 C CNN
+F 3 "~" H 6050 2600 50  0001 C CNN
+	1    5850 2600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5100 2400 5250 2400
+Wire Wire Line
+	5250 2400 5250 2300
+Wire Wire Line
+	5250 2300 5400 2300
+Connection ~ 5400 2300
+Wire Wire Line
+	5100 2600 5650 2600
+$Comp
+L power:+5V #PWR0104
+U 1 1 5F774E8F
+P 5650 2600
+F 0 "#PWR0104" H 5650 2450 50  0001 C CNN
+F 1 "+5V" H 5665 2773 50  0000 C CNN
+F 2 "" H 5650 2600 50  0001 C CNN
+F 3 "" H 5650 2600 50  0001 C CNN
+	1    5650 2600
+	1    0    0    -1  
+$EndComp
+Connection ~ 5650 2600
+Wire Wire Line
+	5650 2600 5850 2600
+$Comp
+L power:+5V #PWR0105
+U 1 1 5F7623BA
+P 2700 2750
+F 0 "#PWR0105" H 2700 2600 50  0001 C CNN
+F 1 "+5V" H 2715 2923 50  0000 C CNN
+F 2 "" H 2700 2750 50  0001 C CNN
+F 3 "" H 2700 2750 50  0001 C CNN
+	1    2700 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2700 2750 2700 2950
+Wire Wire Line
+	2700 2950 2300 2950
+Text Label 2250 2300 0    50   ~ 0
+RF
+Wire Wire Line
+	2700 3150 2950 3150
+Wire Wire Line
+	3150 3150 3250 3150
+$EndSCHEMATC

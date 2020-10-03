@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name radiometrix)(type KiCad)(uri ${KIPRJMOD}/radiometrix.pretty)(options "")(descr ""))
+)
