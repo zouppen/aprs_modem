@@ -5,6 +5,11 @@ backwall=1.7;
 cupdepth=8.25;
 cupwidth=7.6;
 margin=0.2;
+tongue_angle=10;
+tongue_thickness=1;
+tongue_rise=12.5;
+tongue_depth=2.6; // From connector tip to tongue tip
+tongue_width=3.7; // On y axis
 
 // Square pipe, from origo
 module sqpipe(d, w, h, wall) {
@@ -46,32 +51,28 @@ module pole(backdepth=16.6) {
         cube([2*cupdepth,cupwidth+margin,margin], center=true);
     }
 
+    translate([tongue_rise+tongue_depth,0,-cupwidth/2+thinwall+margin]) {
+        tongue(tongue_angle, tongue_width, tongue_rise, tongue_thickness);
+    }
+
     // Back part
     translate([cupdepth,-cupwidth/2,-cupwidth/2]) {
         sqpipe(backdepth, cupwidth, cupwidth, backwall);
     }
 }
 
-difference() {
-    union() {
-        backdepth=16.6;
-        polespacing=7.9;
-
-        pole(backdepth);
-        translate([0,polespacing,0]) {
-            pole(backdepth);
+module tongue( angle, width, length, thickness) {
+    intersection () {
+        difference() {
+            rotate([0,angle,0]) {
+                cube([3*length,width,thickness], center=true);
+            }
+            translate([0,0,-length]) {
+                cube([3*length,width*2,2*length], center=true);
+            }
         }
-
-        // Gap filler and hole
-        gapwidth=polespacing-cupwidth;
-        translate([0,(polespacing-gapwidth)/2,margin/2]) {
-            cube([backdepth+cupdepth,gapwidth,cupwidth/2-margin/2]);
-        }
-        translate([cupdepth, cupwidth/2, -cupwidth/2]) {
-            cube([backdepth, gapwidth, cupwidth]);
-        }
-    }
-    translate([10,cupwidth/2,-cupwidth]) {
-        cylinder(cupwidth*2, 1, 1, $fn=16);
+        cube([2*length, 2*width, length*2], center=true); 
     }
 }
+
+pole();
