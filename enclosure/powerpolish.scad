@@ -1,29 +1,54 @@
 // CSG.scad - Basic example of CSG usage
 
 thinwall=0.8;
-poledepth=8.9;
-gap=0.1;
+backwall=1.7;
+cupdepth=8.25;
+cupwidth=7.6;
+margin=0.2;
+backdepth=16.6;
 
-
-module pole(d, w, h, wall, nudge) {
-    translate([0,0,nudge]) {
-        difference() {
-            // Outer
-            translate([0,-w/2,0]) {
-                cube([d,w,h]);
-            }
-            // Inner
-            translate([-thinwall,-w/2+wall,-wall]) {
-                cube([d,w-2*wall,h]);
-            }
+// Square pipe, from origo
+module sqpipe(d, w, h, wall) {
+    difference() {
+        cube([d,w,h]);
+        translate([-wall,wall,wall]) {
+            cube([d+2*wall,w-2*wall,h-2*wall]);
         }
     }
 }
 
-pole(poledepth, 7.6, 3.8, thinwall, gap);
+// PowerPolish contact cup, centered on y axis and nudged on z axis
+module pole(d, w, h, wall) {
+    difference() {
+        // Outer
+        translate([0,-w/2,0]) {
+            cube([d,w,h]);
+        }
+        // Inner
+        translate([-thinwall,-w/2+wall,-wall]) {
+            cube([d,w-2*wall,h]);
+        }
+    }
+}
 
-rotate([180,0,180]) {
-    translate([-poledepth,0,0]) {
-        pole(poledepth, 5.9, 2.4, thinwall,gap);
+union() {
+    // Front part
+    difference() {
+        union() {
+            // Upper part
+            pole(cupdepth+thinwall, cupwidth, cupwidth/2, thinwall, gap);
+            // Lower part
+            rotate([180,0,180]) {
+                translate([-(cupdepth+thinwall),0,0]) {
+                    pole(cupdepth+thinwall, cupwidth-2*thinwall-margin, cupwidth/2-thinwall-margin, thinwall);
+                }
+            }
+        }
+        cube([2*cupdepth,cupwidth+margin,margin], center=true);
+    }
+
+    // Back part
+    translate([cupdepth,-cupwidth/2,-cupwidth/2]) {
+        sqpipe(backdepth, cupwidth, cupwidth, backwall);
     }
 }
