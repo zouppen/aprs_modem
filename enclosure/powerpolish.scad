@@ -1,13 +1,14 @@
-// CSG.scad - Basic example of CSG usage
+// Anderson PowerPole like housing
+// compatible with original contacts.
 
 thinwall=0.8;
 backwall=1.7;
 cupdepth=8.25;
 cupwidth=7.6;
-margin=0.2;
+margin=0.2; // make the lower part a bit smaller
 tongue_angle=10;
 tongue_thickness=1;
-tongue_rise=12.5;
+tongue_rise=12.5; // Adjust this with the angle
 tongue_depth=2.6; // From connector tip to tongue tip
 tongue_width=3.7; // On y axis
 
@@ -61,7 +62,7 @@ module pole(backdepth=16.6) {
     }
 }
 
-module tongue( angle, width, length, thickness) {
+module tongue(angle, width, length, thickness) {
     intersection () {
         difference() {
             rotate([0,angle,0]) {
@@ -75,4 +76,4 @@ module tongue( angle, width, length, thickness) {
     }
 }
 
-pole();
+pole(10);
