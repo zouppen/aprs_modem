@@ -5,7 +5,6 @@ backwall=1.7;
 cupdepth=8.25;
 cupwidth=7.6;
 margin=0.2;
-backdepth=16.6;
 
 // Square pipe, from origo
 module sqpipe(d, w, h, wall) {
@@ -18,7 +17,7 @@ module sqpipe(d, w, h, wall) {
 }
 
 // PowerPolish contact cup, centered on y axis and nudged on z axis
-module pole(d, w, h, wall) {
+module poletip(d, w, h, wall) {
     difference() {
         // Outer
         translate([0,-w/2,0]) {
@@ -31,16 +30,16 @@ module pole(d, w, h, wall) {
     }
 }
 
-union() {
+module pole(backdepth=16.6) {
     // Front part
     difference() {
         union() {
             // Upper part
-            pole(cupdepth+thinwall, cupwidth, cupwidth/2, thinwall, gap);
+            poletip(cupdepth+thinwall, cupwidth, cupwidth/2, thinwall);
             // Lower part
             rotate([180,0,180]) {
                 translate([-(cupdepth+thinwall),0,0]) {
-                    pole(cupdepth+thinwall, cupwidth-2*thinwall-margin, cupwidth/2-thinwall-margin, thinwall);
+                    poletip(cupdepth+thinwall, cupwidth-2*thinwall-margin, cupwidth/2-thinwall-margin, thinwall);
                 }
             }
         }
@@ -50,5 +49,29 @@ union() {
     // Back part
     translate([cupdepth,-cupwidth/2,-cupwidth/2]) {
         sqpipe(backdepth, cupwidth, cupwidth, backwall);
+    }
+}
+
+difference() {
+    union() {
+        backdepth=16.6;
+        polespacing=7.9;
+
+        pole(backdepth);
+        translate([0,polespacing,0]) {
+            pole(backdepth);
+        }
+
+        // Gap filler and hole
+        gapwidth=polespacing-cupwidth;
+        translate([0,(polespacing-gapwidth)/2,margin/2]) {
+            cube([backdepth+cupdepth,gapwidth,cupwidth/2-margin/2]);
+        }
+        translate([cupdepth, cupwidth/2, -cupwidth/2]) {
+            cube([backdepth, gapwidth, cupwidth]);
+        }
+    }
+    translate([10,cupwidth/2,-cupwidth]) {
+        cylinder(cupwidth*2, 1, 1, $fn=16);
     }
 }
