@@ -11,6 +11,9 @@ tongue_thickness=1;
 tongue_rise=12.5; // Adjust this with the angle
 tongue_depth=2.6; // From connector tip to tongue tip
 tongue_width=3.7; // On y axis
+conn_spacing=7.9; // Spacing between connectors
+hole_x = 10;
+hole_r = 1;
 
 // Square pipe, from origo
 module sqpipe(d, w, h, wall) {
@@ -76,4 +79,32 @@ module tongue(angle, width, length, thickness) {
     }
 }
 
-pole(10);
+module poles(count, backdepth=16.6) {
+    difference() {
+        union() {
+            pole(backdepth);
+            for (i = [1 : 1: count-1]) {
+                translate([0,conn_spacing*i,0]) {
+                    pole(backdepth);
+                    // Gap filler and hole
+                    gapwidth=conn_spacing-cupwidth;
+                    translate([0,(-conn_spacing-gapwidth)/2,margin/2]) {
+                        cube([backdepth+cupdepth,gapwidth,cupwidth/2-margin/2]);
+                    }
+                    translate([cupdepth, cupwidth/2-conn_spacing, -cupwidth/2]) {
+                        cube([backdepth, gapwidth, cupwidth]);
+                    }
+                }
+            }
+        }
+        union() {
+            for (i = [1 : 1 : count-1]) {
+                translate([hole_x,i*conn_spacing-cupwidth/2,-cupwidth]) {
+                    cylinder(cupwidth*2, hole_r, hole_r, $fn=16);
+                }
+            }
+        }
+    }
+}
+
+poles(2,10);
