@@ -10,10 +10,11 @@ tongue_angle=10;
 tongue_thickness=1;
 tongue_rise=12.5; // Adjust this with the angle
 tongue_depth=2.6; // From connector tip to tongue tip
-tongue_width=3.7; // On y axis
+tongue_width=3.5; // On y axis
 conn_spacing=7.9; // Spacing between connectors
 hole_x = 10;
 hole_r = 1;
+wedge_slope = 0.25; // 3D printing aid wedges
 
 // Square pipe, from origo
 module sqpipe(d, w, h, wall) {
@@ -29,17 +30,13 @@ module sqpipe(d, w, h, wall) {
 module poletip(d, w, h, wall) {
     difference() {
         // Outer
-        translate([0,-w/2,0]) {
-            cube([d,w,h]);
-        }
+        translate([0,-w/2,0]) cube([d,w,h]);
         // Inner
-        translate([-thinwall,-w/2+wall,-wall]) {
-            cube([d,w-2*wall,h]);
-        }
+        translate([-thinwall,-w/2+wall,-wall]) cube([d,w-2*wall,h]);
     }
 }
 
-module pole(backdepth=16.6) {
+module pole(backdepth) {
     // Front part
     difference() {
         union() {
@@ -63,6 +60,14 @@ module pole(backdepth=16.6) {
     translate([cupdepth,-cupwidth/2,-cupwidth/2]) {
         sqpipe(backdepth, cupwidth, cupwidth, backwall);
     }
+    
+    // Back weddge to ease printing
+    translate([cupdepth+thinwall,-cupwidth/2,cupwidth/2]) rotate([90,180,180]) wedge(cupwidth/2,wedge_slope*cupwidth,cupwidth);
+    
+    // Front wedge
+    lower_height=cupwidth/2-thinwall-1.5*margin;
+    translate([thinwall,cupwidth/2-thinwall-margin/2,-lower_height-margin/2]) rotate([90,0,0]) wedge(lower_height,wedge_slope*cupwidth,cupwidth-2*thinwall-margin);
+    
 }
 
 module tongue(angle, width, length, thickness) {
@@ -105,6 +110,11 @@ module poles(count, backdepth=16.6) {
             }
         }
     }
+}
+
+module wedge(x, y, z) {
+    linear_extrude(z)
+        polygon([[0,0], [0,x], [y,0]]);
 }
 
 poles(2,10);
