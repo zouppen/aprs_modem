@@ -84,14 +84,21 @@ module tongue(angle, width, length, thickness) {
     }
 }
 
-module poles(count, backdepth=16.6) {
+module poles(count, backdepth=16.6, framing=false) {
+    ends = framing ? [0 : 1: count] : [1 : 1: count-1];
+
     difference() {
         union() {
-            pole(backdepth);
-            for (i = [1 : 1: count-1]) {
+            // Actual poles
+            for (i = [0 : 1: count-1]) {
                 translate([0,conn_spacing*i,0]) {
                     pole(backdepth);
-                    // Gap filler and hole
+                }
+            }
+
+            // Fill gaps between the poles
+            for (i = ends) {
+                translate([0,conn_spacing*i,0]) {
                     gapwidth=conn_spacing-cupwidth;
                     translate([0,(-conn_spacing-gapwidth)/2,margin/2]) {
                         cube([backdepth+cupdepth,gapwidth,cupwidth/2-margin/2]);
@@ -102,7 +109,9 @@ module poles(count, backdepth=16.6) {
                 }
             }
         }
-        union() {
+        
+        // Add holes
+        if (!framing) {
             for (i = [1 : 1 : count-1]) {
                 translate([hole_x,i*conn_spacing-cupwidth/2,-cupwidth]) {
                     cylinder(cupwidth*2, hole_r, hole_r, $fn=16);
@@ -117,5 +126,8 @@ module wedge(x, y, z) {
         polygon([[0,0], [0,x], [y,0]]);
 }
 
-// Printing orientation
-translate([0,0,cupdepth+10]) rotate([0,90,0]) poles(2,10);
+// Test print for "standard" pair of plugs
+translate([0,0,cupdepth+16.6]) rotate([0,90,0]) poles(2);
+
+// Test print for casing
+translate([20,0,cupdepth+10]) rotate([0,90,0]) poles(2,10, framing=true);
