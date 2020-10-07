@@ -6,9 +6,9 @@ backwall=1.7;
 cupdepth=8.25;
 cupwidth=7.6;
 margin=0.2; // make the lower part a bit smaller
-tongue_angle=10;
-tongue_thickness=1;
-tongue_rise=12.5; // Adjust this with the angle
+tongue_angle=18;
+tongue_thickness=0.8;
+tongue_rise=7; // Adjust this with the angle
 tongue_depth=2.6; // From connector tip to tongue tip
 tongue_width=3.5; // On y axis
 conn_spacing=7.9; // Spacing between connectors
@@ -117,4 +117,5 @@ module wedge(x, y, z) {
         polygon([[0,0], [0,x], [y,0]]);
 }
 
-poles(2,10);
+// Printing orientation
+translate([0,0,cupdepth+10]) rotate([0,90,0]) poles(2,10);
