@@ -108,6 +108,29 @@ module poles(count, backdepth=16.6, framing=false) {
                     }
                 }
             }
+            
+            // Add bottom support if framing used
+            if (framing) {
+                // Inner gap
+                translate([cupdepth,cupwidth/2-conn_spacing,-cupwidth/2]) {
+                    mirror([0,0,1]) {
+                        cube([backdepth,(count+1)*conn_spacing-cupwidth,conn_spacing-cupwidth]);
+                    }
+                }
+                // Lowest support
+                translate([0,cupwidth/2-conn_spacing,-conn_spacing/2]) {
+                    mirror([0,0,1]) {
+                        cube([cupdepth+backdepth,(count+1)*conn_spacing-cupwidth,thinwall]);
+                    }
+                }
+                
+                // Side covers
+                for (y_pos = [0, count*conn_spacing+thinwall]) {
+                    translate([0,-thinwall-conn_spacing/2+y_pos,-conn_spacing/2-thinwall]) {
+                        cube([cupdepth+backdepth,thinwall,cupwidth/2+conn_spacing/2+thinwall]);
+                    }
+                }
+            }
         }
         
         // Add holes
@@ -130,4 +153,6 @@ module wedge(x, y, z) {
 translate([0,0,cupdepth+16.6]) rotate([0,90,0]) poles(2);
 
 // Test print for casing
-translate([20,0,cupdepth+10]) rotate([0,90,0]) poles(2,10, framing=true);
+translate([20,0,cupdepth+10]) rotate([0,90,0]) {
+    poles(2,10, framing=true);
+}
