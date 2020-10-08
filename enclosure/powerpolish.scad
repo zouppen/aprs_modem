@@ -2,10 +2,10 @@
 // compatible with original contacts.
 
 thinwall=0.8;
-backwall=1.7;
 cupdepth=8.25;
 cupwidth=7.6;
 margin=0.2; // make the lower part a bit smaller
+backwall=2*thinwall+margin/2;
 tongue_angle=18;
 tongue_thickness=0.8;
 tongue_rise=7; // Adjust this with the angle
@@ -15,6 +15,9 @@ conn_spacing=7.9; // Spacing between connectors
 hole_x = 10;
 hole_r = 1;
 wedge_slope = 0.25; // 3D printing aid wedges
+
+// Some magic values
+lower_pole_inner_h = cupwidth/2-backwall;
 
 // Square pipe, from origo
 module sqpipe(d, w, h, wall) {
@@ -27,12 +30,12 @@ module sqpipe(d, w, h, wall) {
 }
 
 // PowerPolish contact cup, centered on y axis and nudged on z axis
-module poletip(d, w, h, wall) {
+module poletip(d, w, h, wall, wall_bottom) {
     difference() {
         // Outer
         translate([0,-w/2,0]) cube([d,w,h]);
         // Inner
-        translate([-thinwall,-w/2+wall,-wall]) cube([d,w-2*wall,h]);
+        translate([-thinwall,-w/2+wall,-wall_bottom]) cube([d,w-2*wall,h]);
     }
 }
 
@@ -41,11 +44,12 @@ module pole(backdepth) {
     difference() {
         union() {
             // Upper part
-            poletip(cupdepth+thinwall, cupwidth, cupwidth/2, thinwall);
+            poletip(cupdepth+thinwall, cupwidth, cupwidth/2, thinwall, thinwall);
             // Lower part
             rotate([180,0,180]) {
                 translate([-(cupdepth+thinwall),0,0]) {
-                    poletip(cupdepth+thinwall, cupwidth-2*thinwall-margin, cupwidth/2-thinwall-margin, thinwall);
+                    lower_pole_h = cupwidth/2-thinwall-margin;
+                    poletip(cupdepth+thinwall, cupwidth-2*thinwall-margin, lower_pole_h, thinwall, lower_pole_h - lower_pole_inner_h);
                 }
             }
         }
