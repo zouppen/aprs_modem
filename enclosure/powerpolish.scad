@@ -62,7 +62,7 @@ module pole(backdepth) {
     }
     
     // Back weddge to ease printing
-    translate([cupdepth+thinwall,-cupwidth/2,cupwidth/2]) rotate([90,180,180]) wedge(cupwidth/2,wedge_slope*cupwidth,cupwidth);
+    translate([cupdepth+thinwall,-cupwidth/2,cupwidth/2-backwall]) rotate([90,180,180]) wedge(cupwidth/2-backwall,wedge_slope*cupwidth,cupwidth);
     
     // Front wedge
     lower_height=cupwidth/2-thinwall-1.5*margin;
