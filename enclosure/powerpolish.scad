@@ -40,7 +40,7 @@ module poletip(d, w, h, wall, wall_bottom) {
     }
 }
 
-module pole(backdepth, tongue) {
+module pole(backdepth, tongue, cap) {
     // Front part
     difference() {
         union() {
@@ -57,7 +57,11 @@ module pole(backdepth, tongue) {
         cube([2*cupdepth,cupwidth+margin,margin], center=true);
     }
 
-    if (tongue) {
+    if (cap) {
+        translate([0,-cupwidth/2+thinwall+margin/2,-lower_pole_inner_h]) {
+            cube([cupdepth,cupwidth-2*thinwall-margin,tonguelike_h]);
+        }
+    } else if (tongue) {
         // Emulates a metal strip
         translate([tongue_rise+tongue_depth,0,-cupwidth/2+thinwall+margin]) {
             tongue(tongue_angle, tongue_width, tongue_rise, tongue_thickness);
@@ -74,13 +78,16 @@ module pole(backdepth, tongue) {
         }
     }
 
-    // Back part
-    translate([cupdepth,-cupwidth/2,-cupwidth/2]) {
-        sqpipe(backdepth, cupwidth, cupwidth, backwall);
+    // Cap back is rendered in poles function
+    if (!cap) {
+        // Back part
+        translate([cupdepth,-cupwidth/2,-cupwidth/2]) {
+            sqpipe(backdepth, cupwidth, cupwidth, backwall);
+        }
+
+        // Back weddge to ease printing
+        translate([cupdepth+thinwall,-cupwidth/2,cupwidth/2-backwall]) rotate([90,180,180]) wedge(cupwidth/2-backwall,wedge_slope,cupwidth);
     }
-    
-    // Back weddge to ease printing
-    translate([cupdepth+thinwall,-cupwidth/2,cupwidth/2-backwall]) rotate([90,180,180]) wedge(cupwidth/2-backwall,wedge_slope,cupwidth);
     
     // Front wedge
     lower_height=cupwidth/2-thinwall-1.5*margin;
@@ -102,7 +109,7 @@ module tongue(angle, width, length, thickness) {
     }
 }
 
-module poles(count, backdepth=16.6, framing=false, tongue=true) {
+module poles(count, backdepth=16.6, framing=false, tongue=true, cap=false) {
     ends = framing ? [0 : 1: count] : [1 : 1: count-1];
 
     difference() {
@@ -110,7 +117,7 @@ module poles(count, backdepth=16.6, framing=false, tongue=true) {
             // Actual poles
             for (i = [0 : 1: count-1]) {
                 translate([0,conn_spacing*i,0]) {
-                    pole(backdepth, tongue);
+                    pole(backdepth, tongue, cap);
                 }
             }
 
@@ -124,6 +131,12 @@ module poles(count, backdepth=16.6, framing=false, tongue=true) {
                     translate([cupdepth, cupwidth/2-conn_spacing, -cupwidth/2]) {
                         cube([backdepth, gapwidth, cupwidth]);
                     }
+                }
+            }
+
+            if (cap) {
+                translate([cupdepth, -cupwidth/2, -cupwidth/2]) {
+                    cube([backdepth, (count-1)*conn_spacing+cupwidth, cupwidth]);
                 }
             }
             
@@ -152,7 +165,7 @@ module poles(count, backdepth=16.6, framing=false, tongue=true) {
         }
         
         // Add holes
-        if (!framing) {
+        if (!framing && !cap) {
             for (i = [1 : 1 : count-1]) {
                 translate([hole_x,i*conn_spacing-cupwidth/2,-cupwidth]) {
                     cylinder(cupwidth*2, hole_r, hole_r, $fn=16);
@@ -173,4 +186,9 @@ translate([0,0,cupdepth+16.6]) rotate([0,90,0]) poles(2);
 // Test print for casing
 translate([11,0,cupdepth+wedge_slope*lower_pole_inner_h+thinwall]) rotate([0,90,0]) {
     poles(2,wedge_slope*lower_pole_inner_h+thinwall, framing=true, tongue=false);
+}
+
+// Test print for powerpole cap
+translate([22,0,cupdepth+wedge_slope*lower_pole_inner_h+thinwall]) rotate([0,90,0]) {
+    poles(2,wedge_slope*lower_pole_inner_h+thinwall, tongue=false, cap=true);
 }
