@@ -15,7 +15,7 @@ tonguelike_h = 1; // Tongue replacement height
 conn_spacing=7.9; // Spacing between connectors
 hole_x = 10;
 hole_r = 1;
-wedge_slope = 0.25; // 3D printing aid wedges
+wedge_slope = 0.4; // 3D printing aid wedges
 
 // Some magic values
 lower_pole_inner_h = cupwidth/2-backwall;
@@ -70,7 +70,7 @@ module pole(backdepth, tongue) {
         }
         // PCB mount platform wedge
         translate([tongue_depth+tonguelike_x,cupwidth/2-thinwall-margin/2,-lower_pole_inner_h]) {
-            rotate([90,0,0]) wedge(1,1,cupwidth-2*thinwall-margin);
+            rotate([90,0,0]) wedge(tonguelike_h,wedge_slope,cupwidth-2*thinwall-margin);
         }
     }
 
@@ -80,11 +80,11 @@ module pole(backdepth, tongue) {
     }
     
     // Back weddge to ease printing
-    translate([cupdepth+thinwall,-cupwidth/2,cupwidth/2-backwall]) rotate([90,180,180]) wedge(cupwidth/2-backwall,wedge_slope*cupwidth,cupwidth);
+    translate([cupdepth+thinwall,-cupwidth/2,cupwidth/2-backwall]) rotate([90,180,180]) wedge(cupwidth/2-backwall,wedge_slope,cupwidth);
     
     // Front wedge
     lower_height=cupwidth/2-thinwall-1.5*margin;
-    translate([thinwall,cupwidth/2-thinwall-margin/2,-lower_height-margin/2]) rotate([90,0,0]) wedge(lower_height,wedge_slope*cupwidth,cupwidth-2*thinwall-margin);
+    translate([thinwall,cupwidth/2-thinwall-margin/2,-lower_height-margin/2]) rotate([90,0,0]) wedge(lower_height,wedge_slope,cupwidth-2*thinwall-margin);
     
 }
 
@@ -162,15 +162,15 @@ module poles(count, backdepth=16.6, framing=false, tongue=true) {
     }
 }
 
-module wedge(x, y, z) {
+module wedge(x, slope, z) {
     linear_extrude(z)
-        polygon([[0,0], [0,x], [y,0]]);
+        polygon([[0,0], [0,x], [slope*x,0]]);
 }
 
 // Test print for "standard" pair of plugs
 translate([0,0,cupdepth+16.6]) rotate([0,90,0]) poles(2);
 
 // Test print for casing
-translate([11,0,cupdepth+10]) rotate([0,90,0]) {
-    poles(2,wedge_slope*cupwidth+thinwall, framing=true, tongue=false);
+translate([11,0,cupdepth+wedge_slope*lower_pole_inner_h+thinwall]) rotate([0,90,0]) {
+    poles(2,wedge_slope*lower_pole_inner_h+thinwall, framing=true, tongue=false);
 }
