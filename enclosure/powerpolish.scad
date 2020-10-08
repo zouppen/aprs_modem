@@ -11,6 +11,7 @@ tongue_thickness=0.8;
 tongue_rise=7; // Adjust this with the angle
 tongue_depth=2.6; // From connector tip to tongue tip
 tongue_width=3.5; // On y axis
+tonguelike_h = 1; // Tongue replacement height
 conn_spacing=7.9; // Spacing between connectors
 hole_x = 10;
 hole_r = 1;
@@ -39,7 +40,7 @@ module poletip(d, w, h, wall, wall_bottom) {
     }
 }
 
-module pole(backdepth) {
+module pole(backdepth, tongue) {
     // Front part
     difference() {
         union() {
@@ -56,8 +57,21 @@ module pole(backdepth) {
         cube([2*cupdepth,cupwidth+margin,margin], center=true);
     }
 
-    translate([tongue_rise+tongue_depth,0,-cupwidth/2+thinwall+margin]) {
-        tongue(tongue_angle, tongue_width, tongue_rise, tongue_thickness);
+    if (tongue) {
+        // Emulates a metal strip
+        translate([tongue_rise+tongue_depth,0,-cupwidth/2+thinwall+margin]) {
+            tongue(tongue_angle, tongue_width, tongue_rise, tongue_thickness);
+        }
+    } else {
+        // For PCB mounts
+        tonguelike_x = cupdepth*0.3; // Visual guess
+        translate([tongue_depth,-cupwidth/2+thinwall+margin/2,-lower_pole_inner_h]) {
+            cube([tonguelike_x,cupwidth-2*thinwall-margin,tonguelike_h]);
+        }
+        // PCB mount platform wedge
+        translate([tongue_depth+tonguelike_x,cupwidth/2-thinwall-margin/2,-lower_pole_inner_h]) {
+            rotate([90,0,0]) wedge(1,1,cupwidth-2*thinwall-margin);
+        }
     }
 
     // Back part
@@ -88,7 +102,7 @@ module tongue(angle, width, length, thickness) {
     }
 }
 
-module poles(count, backdepth=16.6, framing=false) {
+module poles(count, backdepth=16.6, framing=false, tongue=true) {
     ends = framing ? [0 : 1: count] : [1 : 1: count-1];
 
     difference() {
@@ -96,7 +110,7 @@ module poles(count, backdepth=16.6, framing=false) {
             // Actual poles
             for (i = [0 : 1: count-1]) {
                 translate([0,conn_spacing*i,0]) {
-                    pole(backdepth);
+                    pole(backdepth, tongue);
                 }
             }
 
@@ -157,6 +171,6 @@ module wedge(x, y, z) {
 translate([0,0,cupdepth+16.6]) rotate([0,90,0]) poles(2);
 
 // Test print for casing
-translate([20,0,cupdepth+10]) rotate([0,90,0]) {
-    poles(2,10, framing=true);
+translate([11,0,cupdepth+10]) rotate([0,90,0]) {
+    poles(2,wedge_slope*cupwidth+thinwall, framing=true, tongue=false);
 }
