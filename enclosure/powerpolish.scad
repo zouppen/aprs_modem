@@ -11,10 +11,10 @@ tongue_thickness=1;
 tongue_rise=7; // Adjust this with the angle
 tongue_depth=2.6; // From connector tip to tongue tip
 tongue_width=3.5; // On y axis
-tonguelike_h = 1; // Tongue replacement height
+tonguelike_h = 1.3; // Tongue replacement height
 conn_spacing=7.9; // Spacing between connectors
 hole_x = 10;
-hole_r = 1;
+hole_r = 1.1;
 wedge_slope = 0.4; // 3D printing aid wedges
 
 // Some magic values
