@@ -31,12 +31,13 @@ module sqpipe(d, w, h, wall) {
 }
 
 // PowerPolish contact cup, centered on y axis and nudged on z axis
-module poletip(d, w, h, wall, wall_bottom) {
+module poletip(d, w, h, wall, wall_bottom, fill=false) {
     difference() {
         // Outer
         translate([0,-w/2,0]) cube([d,w,h]);
         // Inner
-        translate([-thinwall,-w/2+wall,-wall_bottom]) cube([d,w-2*wall,h]);
+        if (!fill)
+            translate([-thinwall,-w/2+wall,-wall_bottom]) cube([d,w-2*wall,h]);
     }
 }
 
@@ -50,7 +51,7 @@ module pole(backdepth, tongue, cap) {
             rotate([180,0,180]) {
                 translate([-(cupdepth+thinwall),0,0]) {
                     lower_pole_h = cupwidth/2-thinwall-margin;
-                    poletip(cupdepth+thinwall, cupwidth-2*thinwall-margin, lower_pole_h, thinwall, lower_pole_h - lower_pole_inner_h);
+                    poletip(cupdepth+thinwall, cupwidth-2*thinwall-margin, lower_pole_h, thinwall, lower_pole_h - lower_pole_inner_h, cap);
                 }
             }
         }
@@ -58,9 +59,7 @@ module pole(backdepth, tongue, cap) {
     }
 
     if (cap) {
-        translate([0,-cupwidth/2+thinwall+margin/2,-lower_pole_inner_h]) {
-            cube([cupdepth,cupwidth-2*thinwall-margin,tonguelike_h]);
-        }
+        // Draw nothing
     } else if (tongue) {
         // Emulates a metal strip
         translate([tongue_rise+tongue_depth,0,-cupwidth/2+thinwall+margin]) {
